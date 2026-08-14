@@ -1,69 +1,103 @@
 {
   "categories": [
-    { "id": "cat1", "name": "임차보증금/권리금", "budget": 60000000 },
-    { "id": "cat2", "name": "인테리어비", "budget": 35000000 },
-    { "id": "cat3", "name": "주방기기·설비비", "budget": 15000000 },
-    { "id": "cat4", "name": "가구·집기비", "budget": 5000000 },
-    { "id": "cat5", "name": "초도 식자재비", "budget": 3000000 },
-    { "id": "cat6", "name": "인허가·등록비", "budget": 1000000 },
-    { "id": "cat7", "name": "오픈 마케팅비", "budget": 2000000 },
-    { "id": "cat8", "name": "예비비", "budget": 5000000 }
+    { "id": "cat1", "name": "임차보증금/권리금", "color": "#3182f6" },
+    { "id": "cat2", "name": "인테리어비", "color": "#15c39a" },
+    { "id": "cat3", "name": "주방기기·설비비", "color": "#7b61ff" },
+    { "id": "cat4", "name": "가구·집기비", "color": "#ff8a00" },
+    { "id": "cat5", "name": "초도 식자재비", "color": "#f76099" },
+    { "id": "cat6", "name": "인허가·등록비", "color": "#4c6ef5" },
+    { "id": "cat7", "name": "오픈 마케팅비", "color": "#2fb344" },
+    { "id": "cat8", "name": "예비비", "color": "#f04452" }
   ],
   "expenses": [
     {
       "id": "exp1",
       "categoryId": "cat1",
-      "date": "2026-08-15",
       "title": "보증금 계약금",
+      "unitPrice": 50000000,
+      "quantity": 1,
       "amount": 50000000,
       "memo": "보증금 5천 / 권리금 별도 협의"
     },
     {
       "id": "exp2",
       "categoryId": "cat2",
-      "date": "2026-08-20",
       "title": "홀·주방 인테리어 1차",
+      "unitPrice": 30000000,
+      "quantity": 1,
       "amount": 30000000,
       "memo": "총 3회 분납 중 1차"
     },
     {
       "id": "exp3",
       "categoryId": "cat3",
-      "date": "2026-08-22",
-      "title": "냉장고·화구·후드",
-      "amount": 12500000,
-      "memo": ""
+      "title": "업소용 냉장고",
+      "unitPrice": 3200000,
+      "quantity": 2,
+      "amount": 6400000,
+      "memo": "45박스 / 65박스 각 1대"
     },
     {
       "id": "exp4",
-      "categoryId": "cat4",
-      "date": "2026-08-25",
-      "title": "테이블 12세트·의자",
-      "amount": 4800000,
+      "categoryId": "cat3",
+      "title": "가스레인지·후드",
+      "unitPrice": 6100000,
+      "quantity": 1,
+      "amount": 6100000,
       "memo": ""
     },
     {
       "id": "exp5",
-      "categoryId": "cat6",
-      "date": "2026-08-26",
-      "title": "영업신고·위생교육",
-      "amount": 350000,
-      "memo": "위생교육 수료증 포함"
+      "categoryId": "cat4",
+      "title": "4인 테이블 세트",
+      "unitPrice": 320000,
+      "quantity": 12,
+      "amount": 3840000,
+      "memo": "테이블 1 + 의자 4 구성"
     },
     {
       "id": "exp6",
-      "categoryId": "cat5",
-      "date": "2026-08-30",
-      "title": "초도 식자재 입고",
-      "amount": 2400000,
+      "categoryId": "cat4",
+      "title": "주방 집기·식기류",
+      "unitPrice": 960000,
+      "quantity": 1,
+      "amount": 960000,
       "memo": ""
     },
     {
       "id": "exp7",
+      "categoryId": "cat6",
+      "title": "영업신고·위생교육",
+      "unitPrice": 350000,
+      "quantity": 1,
+      "amount": 350000,
+      "memo": "위생교육 수료증 포함"
+    },
+    {
+      "id": "exp8",
+      "categoryId": "cat5",
+      "title": "초도 식자재 입고",
+      "unitPrice": 2400000,
+      "quantity": 1,
+      "amount": 2400000,
+      "memo": ""
+    },
+    {
+      "id": "exp9",
       "categoryId": "cat7",
-      "date": "2026-09-01",
-      "title": "오픈 전단·SNS 광고",
-      "amount": 1800000,
+      "title": "오픈 전단 인쇄",
+      "unitPrice": 90000,
+      "quantity": 10,
+      "amount": 900000,
+      "memo": "1,000장 단위"
+    },
+    {
+      "id": "exp10",
+      "categoryId": "cat7",
+      "title": "SNS 광고 집행",
+      "unitPrice": 900000,
+      "quantity": 1,
+      "amount": 900000,
       "memo": "인스타 리뷰단 포함"
     }
   ]

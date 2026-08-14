@@ -1,0 +1,1448 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F9FAFB">
+<title>식당 창업예산 관리</title>
+<style>
+  :root {
+    --blue: #3182F6;
+    --blue-hover: #1B64DA;
+    --blue-weak: #E8F3FF;
+    --bg: #F9FAFB;
+    --surface: #FFFFFF;
+    --surface-sub: #F2F4F6;
+    --text: #191F28;
+    --text-2: #4E5968;
+    --text-3: #8B95A1;
+    --border: #E5E8EB;
+    --border-strong: #D1D6DB;
+    --red: #F04452;
+    --red-weak: #FFEBEE;
+    --green: #15C39A;
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, .04);
+    --shadow-md: 0 2px 8px rgba(0, 0, 0, .06), 0 1px 2px rgba(0, 0, 0, .04);
+    --shadow-lg: 0 8px 24px rgba(0, 0, 0, .12);
+    --r-sm: 8px;
+    --r-md: 12px;
+    --r-lg: 16px;
+    --r-xl: 20px;
+    --ease: cubic-bezier(.25, .46, .45, .94);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --blue: #4E93FF;
+      --blue-hover: #6BA5FF;
+      --blue-weak: #1B2A44;
+      --bg: #17171C;
+      --surface: #202027;
+      --surface-sub: #2A2A32;
+      --text: #F2F4F6;
+      --text-2: #C9CDD2;
+      --text-3: #8B95A1;
+      --border: #33333D;
+      --border-strong: #454550;
+      --red: #FF6B76;
+      --red-weak: #3A2226;
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, .3);
+      --shadow-md: 0 2px 8px rgba(0, 0, 0, .35);
+      --shadow-lg: 0 8px 24px rgba(0, 0, 0, .5);
+    }
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    color-scheme: light dark;
+  }
+
+  body {
+    font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
+                 "Apple SD Gothic Neo", "Malgun Gothic", "맑은 고딕", system-ui, Roboto, sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-size-adjust: 100%;
+    letter-spacing: -0.01em;
+  }
+
+  button, input, select, textarea {
+    font-family: inherit;
+    font-size: inherit;
+    letter-spacing: inherit;
+    color: inherit;
+  }
+
+  button { cursor: pointer; border: none; background: none; padding: 0; }
+
+  .tabular { font-variant-numeric: tabular-nums; font-feature-settings: "tnum"; }
+
+  /* ---------- Layout ---------- */
+  .app {
+    max-width: 560px;
+    margin: 0 auto;
+    padding: 0 16px calc(48px + env(safe-area-inset-bottom));
+  }
+
+  .appbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 14px 0 12px;
+    background: var(--bg);
+  }
+
+  .appbar h1 {
+    margin: 0;
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+  }
+
+  .appbar .sub {
+    display: block;
+    margin-top: 1px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-3);
+    letter-spacing: -0.01em;
+  }
+
+  .card {
+    background: var(--surface);
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-md);
+    padding: 20px;
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin: 0 0 14px;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  /* ---------- Hero summary ---------- */
+  .hero { padding: 22px 20px; }
+
+  .hero-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-3);
+  }
+
+  .hero-amount {
+    margin-top: 6px;
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -0.045em;
+    line-height: 1.15;
+  }
+
+  .hero-meta {
+    margin-top: 4px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-3);
+  }
+
+  .hero-budget {
+    margin-top: 18px;
+    padding-top: 18px;
+    border-top: 1px solid var(--border);
+  }
+
+  .hero-budget-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-2);
+  }
+
+  .hero-budget-row b { font-weight: 700; }
+
+  .hero-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+
+  .stat-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-3);
+  }
+
+  .stat-value {
+    margin-top: 2px;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    white-space: nowrap;
+  }
+
+  .stat-value.neg { color: var(--red); }
+
+  /* ---------- Progress ---------- */
+  .bar {
+    height: 8px;
+    margin-top: 10px;
+    border-radius: 999px;
+    background: var(--surface-sub);
+    overflow: hidden;
+  }
+
+  .bar > span {
+    display: block;
+    height: 100%;
+    border-radius: 999px;
+    background: var(--blue);
+    transition: width .5s var(--ease);
+  }
+
+  .bar.over > span { background: var(--red); }
+
+  .bar.sm { height: 6px; margin-top: 8px; }
+
+  /* ---------- Category summary ---------- */
+  .cat-row {
+    display: block;
+    width: 100%;
+    padding: 12px 10px;
+    margin: 0 -10px;
+    border-radius: var(--r-md);
+    text-align: left;
+    transition: background .15s var(--ease);
+  }
+
+  .cat-row + .cat-row { margin-top: 2px; }
+  .cat-row:hover { background: var(--surface-sub); }
+  .cat-row:active { background: var(--border); }
+
+  .cat-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .dot {
+    flex: none;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--blue);
+  }
+
+  .cat-name {
+    flex: 1;
+    min-width: 0;
+    font-size: 14px;
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .cat-amount {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .cat-sub {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 5px;
+    padding-left: 16px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-3);
+  }
+
+  .cat-sub .over { color: var(--red); font-weight: 600; }
+
+  /* ---------- Form ---------- */
+  .field { margin-bottom: 14px; }
+  .field:last-of-type { margin-bottom: 0; }
+
+  .field label {
+    display: block;
+    margin-bottom: 7px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-2);
+  }
+
+  .row-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  input[type="text"],
+  input[type="date"],
+  input[type="number"],
+  select,
+  textarea {
+    width: 100%;
+    padding: 13px 14px;
+    background: var(--surface-sub);
+    border: 1px solid transparent;
+    border-radius: var(--r-md);
+    font-size: 15px;
+    font-weight: 500;
+    outline: none;
+    transition: background .15s var(--ease), border-color .15s var(--ease), box-shadow .15s var(--ease);
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  textarea { min-height: 76px; resize: vertical; line-height: 1.5; }
+
+  input:focus, select:focus, textarea:focus {
+    background: var(--surface);
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--blue) 18%, transparent);
+  }
+
+  input::placeholder, textarea::placeholder { color: var(--text-3); font-weight: 500; }
+
+  input[type="date"] { min-height: 49px; }
+
+  select {
+    padding-right: 38px;
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' fill='none'%3E%3Cpath d='M5.5 8L10 12.5L14.5 8' stroke='%238B95A1' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+  }
+
+  .money-wrap { position: relative; }
+
+  .money-wrap > span {
+    position: absolute;
+    top: 50%;
+    left: 14px;
+    transform: translateY(-50%);
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-3);
+    pointer-events: none;
+  }
+
+  .money-wrap input {
+    padding-left: 32px;
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .amount-quick {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+  }
+
+  .chip-mini {
+    padding: 6px 10px;
+    background: var(--surface-sub);
+    border-radius: var(--r-sm);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-2);
+    transition: background .15s var(--ease), transform .1s var(--ease);
+  }
+
+  .chip-mini:hover { background: var(--border); }
+  .chip-mini:active { transform: scale(.94); }
+
+  /* ---------- Buttons ---------- */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 14px 18px;
+    border-radius: var(--r-md);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    transition: background .15s var(--ease), transform .1s var(--ease), opacity .15s var(--ease);
+  }
+
+  .btn[hidden] { display: none; }
+  .btn:active { transform: scale(.98); }
+  .btn:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+  .btn.block { width: 100%; }
+
+  .btn-primary { background: var(--blue); color: #fff; }
+  .btn-primary:hover { background: var(--blue-hover); }
+  .btn-primary:disabled { opacity: .4; cursor: not-allowed; transform: none; }
+
+  .btn-sub { background: var(--surface-sub); color: var(--text-2); }
+  .btn-sub:hover { background: var(--border); }
+
+  .btn-danger { background: var(--red); color: #fff; }
+  .btn-danger:hover { filter: brightness(1.05); }
+
+  .btn-ghost {
+    padding: 8px 10px;
+    border-radius: var(--r-sm);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-3);
+    transition: background .15s var(--ease), color .15s var(--ease);
+  }
+
+  .btn-ghost:hover { background: var(--surface-sub); color: var(--text-2); }
+  .btn-ghost.danger:hover { background: var(--red-weak); color: var(--red); }
+
+  .link-btn {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--blue);
+    transition: opacity .15s var(--ease);
+  }
+
+  .link-btn:hover { opacity: .7; }
+
+  .form-actions { display: flex; gap: 8px; margin-top: 18px; }
+  .form-actions .btn { flex: 1; }
+
+  /* ---------- Filter chips ---------- */
+  .filters {
+    display: flex;
+    gap: 6px;
+    margin: 0 -16px 12px;
+    padding: 2px 16px 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .filters::-webkit-scrollbar { display: none; }
+
+  .chip {
+    flex: none;
+    padding: 8px 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-2);
+    white-space: nowrap;
+    transition: all .15s var(--ease);
+  }
+
+  .chip:hover { border-color: var(--border-strong); }
+  .chip:active { transform: scale(.96); }
+
+  .chip.active {
+    background: var(--blue);
+    border-color: var(--blue);
+    color: #fff;
+  }
+
+  /* ---------- Expense list ---------- */
+  .list { display: flex; flex-direction: column; }
+
+  .item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+    animation: fadeUp .3s var(--ease) both;
+  }
+
+  .item:last-child { border-bottom: none; padding-bottom: 0; }
+  .item:first-child { padding-top: 0; }
+  .item.editing { background: var(--blue-weak); margin: 0 -12px; padding: 14px 12px; border-radius: var(--r-md); border-bottom-color: transparent; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  .item-main { flex: 1; min-width: 0; }
+
+  .item-title {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .item-meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 5px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-3);
+  }
+
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 8px;
+    background: var(--surface-sub);
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-2);
+  }
+
+  .tag .dot { width: 6px; height: 6px; }
+
+  .item-memo {
+    margin-top: 6px;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--text-3);
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .item-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+
+  .item-amount {
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    white-space: nowrap;
+  }
+
+  .item-actions { display: flex; gap: 2px; }
+
+  .empty {
+    padding: 44px 20px;
+    text-align: center;
+    color: var(--text-3);
+  }
+
+  .empty .big { font-size: 30px; }
+
+  .empty .msg {
+    margin-top: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-2);
+  }
+
+  .empty .hint { margin-top: 4px; font-size: 13px; font-weight: 500; }
+
+  /* ---------- Modal ---------- */
+  .overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 0;
+    background: rgba(0, 0, 0, .45);
+    animation: fade .2s var(--ease);
+  }
+
+  .overlay[hidden] { display: none; }
+
+  @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes slideUp { from { transform: translateY(24px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+  .sheet {
+    width: 100%;
+    max-width: 560px;
+    max-height: 88vh;
+    overflow-y: auto;
+    padding: 24px 20px calc(24px + env(safe-area-inset-bottom));
+    background: var(--surface);
+    border-radius: var(--r-xl) var(--r-xl) 0 0;
+    box-shadow: var(--shadow-lg);
+    animation: slideUp .28s var(--ease);
+  }
+
+  @media (min-width: 600px) {
+    .overlay { align-items: center; padding: 20px; }
+    .sheet { border-radius: var(--r-xl); }
+  }
+
+  .sheet h2 {
+    margin: 0 0 4px;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+  }
+
+  .sheet p.desc {
+    margin: 0 0 20px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-2);
+    line-height: 1.55;
+  }
+
+  .sheet-actions { display: flex; gap: 8px; margin-top: 22px; }
+  .sheet-actions .btn { flex: 1; }
+
+  .cat-edit {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .cat-edit:last-of-type { border-bottom: none; }
+  .cat-edit .name { flex: 1; min-width: 0; font-size: 14px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  .budget-input {
+    width: 118px;
+    padding: 8px 10px !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    text-align: right;
+  }
+
+  .add-cat { display: flex; gap: 8px; margin-top: 16px; }
+  .add-cat input { flex: 1; }
+  .add-cat .btn { flex: none; padding: 13px 18px; }
+
+  /* ---------- Toast ---------- */
+  .toast {
+    position: fixed;
+    left: 50%;
+    bottom: calc(28px + env(safe-area-inset-bottom));
+    z-index: 90;
+    transform: translate(-50%, 12px);
+    max-width: calc(100vw - 40px);
+    padding: 13px 20px;
+    background: var(--text);
+    color: var(--bg);
+    border-radius: var(--r-md);
+    box-shadow: var(--shadow-lg);
+    font-size: 14px;
+    font-weight: 600;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .22s var(--ease), transform .22s var(--ease);
+  }
+
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <header class="appbar">
+    <div>
+      <h1>창업예산 관리</h1>
+      <span class="sub">식당 오픈 초기비용</span>
+    </div>
+    <button class="btn btn-sub" id="btnCategories" style="padding:10px 14px;font-size:13px;">카테고리 관리</button>
+  </header>
+
+  <!-- 상단: 전체 합계 -->
+  <section class="card hero">
+    <div class="hero-label">총 창업비용</div>
+    <div class="hero-amount tabular" id="totalAmount">₩0</div>
+    <div class="hero-meta" id="totalMeta">내역 0건</div>
+
+    <div class="hero-budget" id="heroBudget" hidden>
+      <div class="hero-budget-row">
+        <span id="budgetRatioText">예산 대비 0% 사용</span>
+      </div>
+      <div class="bar" id="totalBar"><span style="width:0%"></span></div>
+      <div class="hero-stats">
+        <div>
+          <div class="stat-label">예산</div>
+          <div class="stat-value tabular" id="statBudget">₩0</div>
+        </div>
+        <div>
+          <div class="stat-label">지출</div>
+          <div class="stat-value tabular" id="statSpent">₩0</div>
+        </div>
+        <div>
+          <div class="stat-label" id="statRestLabel">잔여</div>
+          <div class="stat-value tabular" id="statRest">₩0</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 카테고리별 합계 -->
+  <section class="card">
+    <h2 class="section-title">
+      카테고리별 합계
+      <button class="link-btn" id="btnBudgetSetup">예산 설정</button>
+    </h2>
+    <div id="categorySummary"></div>
+  </section>
+
+  <!-- 중단: 입력 폼 -->
+  <section class="card">
+    <h2 class="section-title" id="formTitle">내역 추가</h2>
+    <form id="expenseForm" novalidate>
+      <div class="row-2">
+        <div class="field">
+          <label for="fDate">날짜</label>
+          <input type="date" id="fDate" required>
+        </div>
+        <div class="field">
+          <label for="fCategory">카테고리</label>
+          <select id="fCategory" required></select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="fTitle">항목명</label>
+        <input type="text" id="fTitle" placeholder="예: 보증금 계약금" maxlength="60" autocomplete="off" required>
+      </div>
+
+      <div class="field">
+        <label for="fAmount">금액</label>
+        <div class="money-wrap">
+          <span aria-hidden="true">₩</span>
+          <input type="text" id="fAmount" inputmode="numeric" placeholder="0" autocomplete="off" required>
+        </div>
+        <div class="amount-quick">
+          <button type="button" class="chip-mini" data-add="10000">+1만</button>
+          <button type="button" class="chip-mini" data-add="100000">+10만</button>
+          <button type="button" class="chip-mini" data-add="1000000">+100만</button>
+          <button type="button" class="chip-mini" data-add="10000000">+1천만</button>
+          <button type="button" class="chip-mini" data-add="0">초기화</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="fMemo">메모 <span style="color:var(--text-3);font-weight:500;">(선택)</span></label>
+        <textarea id="fMemo" placeholder="계약 조건, 업체명 등" maxlength="200"></textarea>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn btn-sub" id="btnCancelEdit" hidden>취소</button>
+        <button type="submit" class="btn btn-primary" id="btnSubmit">추가하기</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- 하단: 내역 리스트 -->
+  <section>
+    <h2 class="section-title" style="padding:0 4px;">
+      전체 내역
+      <span style="font-size:13px;font-weight:600;color:var(--text-3);" id="listCount">0건</span>
+    </h2>
+    <div class="filters" id="filters"></div>
+    <div class="card" style="padding:16px 20px;">
+      <div class="list" id="expenseList"></div>
+    </div>
+  </section>
+</div>
+
+<!-- 카테고리 관리 -->
+<div class="overlay" id="categoryModal" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="catModalTitle">
+    <h2 id="catModalTitle">카테고리 관리</h2>
+    <p class="desc">카테고리를 추가하거나 삭제하고, 항목별 예산을 설정할 수 있어요.</p>
+    <div id="categoryEditList"></div>
+    <form class="add-cat" id="addCategoryForm">
+      <input type="text" id="newCategoryName" placeholder="새 카테고리 이름" maxlength="20" autocomplete="off">
+      <button type="submit" class="btn btn-primary">추가</button>
+    </form>
+    <div class="sheet-actions">
+      <button type="button" class="btn btn-sub" id="btnExport">JSON 내보내기</button>
+      <button type="button" class="btn btn-primary" id="btnCloseCategories">완료</button>
+    </div>
+  </div>
+</div>
+
+<!-- 확인 다이얼로그 -->
+<div class="overlay" id="confirmModal" hidden>
+  <div class="sheet" style="max-width:400px;" role="alertdialog" aria-modal="true" aria-labelledby="confirmTitle">
+    <h2 id="confirmTitle">삭제할까요?</h2>
+    <p class="desc" id="confirmDesc">이 작업은 되돌릴 수 없어요.</p>
+    <div class="sheet-actions">
+      <button type="button" class="btn btn-sub" id="btnConfirmCancel">취소</button>
+      <button type="button" class="btn btn-danger" id="btnConfirmOk">삭제</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* =========================================================
+     데이터 (JSON 구조 + localStorage)
+     ========================================================= */
+  var STORAGE_KEY = 'restaurant-startup-budget-v1';
+
+  var DEFAULT_CATEGORY_NAMES = [
+    '임차보증금/권리금',
+    '인테리어비',
+    '주방기기·설비비',
+    '가구·집기비',
+    '초도 식자재비',
+    '인허가·등록비',
+    '오픈 마케팅비',
+    '예비비'
+  ];
+
+  var PALETTE = ['#3182F6', '#15C39A', '#7B61FF', '#FF8A00', '#F76099', '#4C6EF5', '#2FB344', '#F04452'];
+
+  var state = { categories: [], expenses: [] };
+  var editingId = null;
+  var activeFilter = 'all';
+  var confirmHandler = null;
+
+  function uid(prefix) {
+    return prefix + '_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+  }
+
+  function defaultData() {
+    return {
+      categories: DEFAULT_CATEGORY_NAMES.map(function (name) {
+        return { id: uid('cat'), name: name, budget: 0 };
+      }),
+      expenses: []
+    };
+  }
+
+  function load() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return defaultData();
+
+      var parsed = JSON.parse(raw);
+      var data = defaultData();
+      data.categories = [];
+
+      if (Array.isArray(parsed.categories)) {
+        parsed.categories.forEach(function (c) {
+          if (!c || typeof c.name !== 'string') return;
+          data.categories.push({
+            id: typeof c.id === 'string' && c.id ? c.id : uid('cat'),
+            name: c.name,
+            budget: Number(c.budget) > 0 ? Math.round(Number(c.budget)) : 0
+          });
+        });
+      }
+      if (!data.categories.length) data.categories = defaultData().categories;
+
+      if (Array.isArray(parsed.expenses)) {
+        var validIds = {};
+        data.categories.forEach(function (c) { validIds[c.id] = true; });
+
+        parsed.expenses.forEach(function (e) {
+          if (!e || typeof e !== 'object') return;
+          var amount = Number(e.amount);
+          if (!isFinite(amount) || amount < 0) amount = 0;
+          data.expenses.push({
+            id: typeof e.id === 'string' && e.id ? e.id : uid('exp'),
+            categoryId: validIds[e.categoryId] ? e.categoryId : data.categories[0].id,
+            date: typeof e.date === 'string' && e.date ? e.date : todayStr(),
+            title: typeof e.title === 'string' ? e.title : '',
+            amount: Math.round(amount),
+            memo: typeof e.memo === 'string' ? e.memo : ''
+          });
+        });
+      }
+      return data;
+    } catch (err) {
+      console.warn('저장된 데이터를 읽지 못했습니다.', err);
+      return defaultData();
+    }
+  }
+
+  function save() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (err) {
+      toast('저장 공간이 부족해 저장하지 못했어요');
+    }
+  }
+
+  /* =========================================================
+     유틸
+     ========================================================= */
+  function todayStr() {
+    var d = new Date();
+    var m = String(d.getMonth() + 1).padStart(2, '0');
+    var day = String(d.getDate()).padStart(2, '0');
+    return d.getFullYear() + '-' + m + '-' + day;
+  }
+
+  function comma(n) {
+    return Math.round(Number(n) || 0).toLocaleString('ko-KR');
+  }
+
+  function won(n) {
+    return '₩' + comma(n);
+  }
+
+  function digitsOnly(str) {
+    return String(str).replace(/[^\d]/g, '');
+  }
+
+  function parseAmount(str) {
+    var d = digitsOnly(str);
+    if (!d) return 0;
+    return Math.min(parseInt(d, 10), 999999999999);
+  }
+
+  function formatDate(iso) {
+    var parts = String(iso).split('-');
+    if (parts.length !== 3) return iso;
+    return Number(parts[1]) + '월 ' + Number(parts[2]) + '일';
+  }
+
+  function esc(str) {
+    return String(str)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+
+  function categoryColor(id) {
+    var idx = state.categories.findIndex(function (c) { return c.id === id; });
+    return PALETTE[(idx < 0 ? 0 : idx) % PALETTE.length];
+  }
+
+  function categoryById(id) {
+    return state.categories.filter(function (c) { return c.id === id; })[0] || null;
+  }
+
+  function totalsByCategory() {
+    var map = {};
+    state.categories.forEach(function (c) { map[c.id] = 0; });
+    state.expenses.forEach(function (e) {
+      if (map[e.categoryId] === undefined) map[e.categoryId] = 0;
+      map[e.categoryId] += e.amount;
+    });
+    return map;
+  }
+
+  function grandTotal() {
+    return state.expenses.reduce(function (sum, e) { return sum + e.amount; }, 0);
+  }
+
+  function totalBudget() {
+    return state.categories.reduce(function (sum, c) { return sum + (c.budget || 0); }, 0);
+  }
+
+  var toastTimer = null;
+  function toast(message) {
+    var el = document.getElementById('toast');
+    el.textContent = message;
+    el.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { el.classList.remove('show'); }, 2000);
+  }
+
+  /* =========================================================
+     렌더링
+     ========================================================= */
+  function render() {
+    renderSummary();
+    renderCategorySummary();
+    renderCategorySelect();
+    renderFilters();
+    renderList();
+  }
+
+  function renderSummary() {
+    var total = grandTotal();
+    var budget = totalBudget();
+
+    document.getElementById('totalAmount').textContent = won(total);
+    document.getElementById('totalMeta').textContent =
+      '내역 ' + state.expenses.length + '건 · 카테고리 ' + state.categories.length + '개';
+
+    var heroBudget = document.getElementById('heroBudget');
+    if (budget <= 0) {
+      heroBudget.hidden = true;
+      return;
+    }
+    heroBudget.hidden = false;
+
+    var ratio = total / budget * 100;
+    var rest = budget - total;
+
+    document.getElementById('budgetRatioText').textContent = '예산 대비 ' + ratio.toFixed(1) + '% 사용';
+
+    var bar = document.getElementById('totalBar');
+    bar.classList.toggle('over', total > budget);
+    bar.firstElementChild.style.width = Math.min(ratio, 100) + '%';
+
+    document.getElementById('statBudget').textContent = won(budget);
+    document.getElementById('statSpent').textContent = won(total);
+
+    var restEl = document.getElementById('statRest');
+    document.getElementById('statRestLabel').textContent = rest < 0 ? '초과' : '잔여';
+    restEl.textContent = won(Math.abs(rest));
+    restEl.classList.toggle('neg', rest < 0);
+  }
+
+  function renderCategorySummary() {
+    var wrap = document.getElementById('categorySummary');
+    var totals = totalsByCategory();
+    var total = grandTotal();
+
+    if (!state.categories.length) {
+      wrap.innerHTML = '<div class="empty"><div class="msg">카테고리가 없어요</div>' +
+        '<div class="hint">카테고리 관리에서 추가해 주세요</div></div>';
+      return;
+    }
+
+    var rows = state.categories.map(function (c) {
+      var amount = totals[c.id] || 0;
+      var color = categoryColor(c.id);
+      var sub, barPct, over = false;
+
+      if (c.budget > 0) {
+        var pct = amount / c.budget * 100;
+        over = amount > c.budget;
+        barPct = Math.min(pct, 100);
+        sub = '<span>예산 ' + won(c.budget) + '</span>' +
+              '<span class="' + (over ? 'over' : '') + '">' +
+              (over ? '초과 ' + won(amount - c.budget) : pct.toFixed(0) + '%') + '</span>';
+      } else {
+        barPct = total > 0 ? amount / total * 100 : 0;
+        sub = '<span>전체의 ' + (total > 0 ? barPct.toFixed(0) : 0) + '%</span>' +
+              '<span>예산 미설정</span>';
+      }
+
+      return '<button type="button" class="cat-row" data-filter="' + c.id + '">' +
+          '<div class="cat-head">' +
+            '<i class="dot" style="background:' + color + '"></i>' +
+            '<span class="cat-name">' + esc(c.name) + '</span>' +
+            '<span class="cat-amount tabular">' + won(amount) + '</span>' +
+          '</div>' +
+          '<div class="bar sm' + (over ? ' over' : '') + '">' +
+            '<span style="width:' + barPct + '%;' + (over || c.budget > 0 ? '' : 'background:' + color) + '"></span>' +
+          '</div>' +
+          '<div class="cat-sub">' + sub + '</div>' +
+        '</button>';
+    }).join('');
+
+    wrap.innerHTML = rows;
+
+    wrap.querySelectorAll('[data-filter]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        activeFilter = btn.getAttribute('data-filter');
+        renderFilters();
+        renderList();
+        document.getElementById('filters').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+  }
+
+  function renderCategorySelect() {
+    var select = document.getElementById('fCategory');
+    var prev = select.value;
+    select.innerHTML = state.categories.map(function (c) {
+      return '<option value="' + c.id + '">' + esc(c.name) + '</option>';
+    }).join('');
+    if (prev && categoryById(prev)) select.value = prev;
+  }
+
+  function renderFilters() {
+    var counts = {};
+    state.expenses.forEach(function (e) {
+      counts[e.categoryId] = (counts[e.categoryId] || 0) + 1;
+    });
+
+    var html = '<button type="button" class="chip' + (activeFilter === 'all' ? ' active' : '') +
+      '" data-f="all">전체 ' + state.expenses.length + '</button>';
+
+    html += state.categories.map(function (c) {
+      if (!counts[c.id]) return '';
+      return '<button type="button" class="chip' + (activeFilter === c.id ? ' active' : '') +
+        '" data-f="' + c.id + '">' + esc(c.name) + ' ' + counts[c.id] + '</button>';
+    }).join('');
+
+    var filters = document.getElementById('filters');
+    filters.innerHTML = html;
+    filters.querySelectorAll('[data-f]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        activeFilter = btn.getAttribute('data-f');
+        renderFilters();
+        renderList();
+      });
+    });
+  }
+
+  function renderList() {
+    var listEl = document.getElementById('expenseList');
+    var items = state.expenses.slice();
+
+    if (activeFilter !== 'all') {
+      items = items.filter(function (e) { return e.categoryId === activeFilter; });
+    }
+
+    items.sort(function (a, b) {
+      if (a.date === b.date) return a.id < b.id ? 1 : -1;
+      return a.date < b.date ? 1 : -1;
+    });
+
+    var filterTotal = items.reduce(function (s, e) { return s + e.amount; }, 0);
+    document.getElementById('listCount').textContent = items.length + '건 · ' + won(filterTotal);
+
+    if (!items.length) {
+      listEl.innerHTML = '<div class="empty">' +
+        '<div class="big">🧾</div>' +
+        '<div class="msg">' + (state.expenses.length ? '이 카테고리엔 내역이 없어요' : '아직 등록된 내역이 없어요') + '</div>' +
+        '<div class="hint">위 폼에서 첫 창업비용을 기록해 보세요</div>' +
+        '</div>';
+      return;
+    }
+
+    listEl.innerHTML = items.map(function (e) {
+      var cat = categoryById(e.categoryId);
+      var color = categoryColor(e.categoryId);
+      return '<div class="item' + (editingId === e.id ? ' editing' : '') + '">' +
+          '<div class="item-main">' +
+            '<div class="item-title">' + esc(e.title) + '</div>' +
+            '<div class="item-meta">' +
+              '<span class="tag"><i class="dot" style="background:' + color + '"></i>' +
+                esc(cat ? cat.name : '미분류') + '</span>' +
+              '<span>' + esc(formatDate(e.date)) + '</span>' +
+            '</div>' +
+            (e.memo ? '<div class="item-memo">' + esc(e.memo) + '</div>' : '') +
+          '</div>' +
+          '<div class="item-right">' +
+            '<div class="item-amount tabular">' + won(e.amount) + '</div>' +
+            '<div class="item-actions">' +
+              '<button type="button" class="btn-ghost" data-edit="' + e.id + '">수정</button>' +
+              '<button type="button" class="btn-ghost danger" data-del="' + e.id + '">삭제</button>' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+    }).join('');
+
+    listEl.querySelectorAll('[data-edit]').forEach(function (btn) {
+      btn.addEventListener('click', function () { startEdit(btn.getAttribute('data-edit')); });
+    });
+    listEl.querySelectorAll('[data-del]').forEach(function (btn) {
+      btn.addEventListener('click', function () { askDeleteExpense(btn.getAttribute('data-del')); });
+    });
+  }
+
+  /* =========================================================
+     내역 CRUD
+     ========================================================= */
+  var form = document.getElementById('expenseForm');
+  var fDate = document.getElementById('fDate');
+  var fCategory = document.getElementById('fCategory');
+  var fTitle = document.getElementById('fTitle');
+  var fAmount = document.getElementById('fAmount');
+  var fMemo = document.getElementById('fMemo');
+
+  fAmount.addEventListener('input', function () {
+    var value = parseAmount(fAmount.value);
+    fAmount.value = value ? comma(value) : '';
+  });
+
+  document.querySelectorAll('[data-add]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var add = Number(btn.getAttribute('data-add'));
+      if (add === 0) {
+        fAmount.value = '';
+      } else {
+        fAmount.value = comma(parseAmount(fAmount.value) + add);
+      }
+      fAmount.focus();
+    });
+  });
+
+  form.addEventListener('submit', function (event) {
+    event.preventDefault();
+
+    if (!state.categories.length) {
+      toast('먼저 카테고리를 추가해 주세요');
+      return;
+    }
+
+    var title = fTitle.value.trim();
+    var amount = parseAmount(fAmount.value);
+
+    if (!fDate.value) { toast('날짜를 선택해 주세요'); fDate.focus(); return; }
+    if (!title) { toast('항목명을 입력해 주세요'); fTitle.focus(); return; }
+    if (amount <= 0) { toast('금액을 입력해 주세요'); fAmount.focus(); return; }
+
+    if (editingId) {
+      var target = state.expenses.filter(function (e) { return e.id === editingId; })[0];
+      if (target) {
+        target.date = fDate.value;
+        target.categoryId = fCategory.value;
+        target.title = title;
+        target.amount = amount;
+        target.memo = fMemo.value.trim();
+      }
+      toast('수정했어요');
+    } else {
+      state.expenses.push({
+        id: uid('exp'),
+        categoryId: fCategory.value,
+        date: fDate.value,
+        title: title,
+        amount: amount,
+        memo: fMemo.value.trim()
+      });
+      toast('내역을 추가했어요');
+    }
+
+    save();
+    resetForm();
+    render();
+  });
+
+  function startEdit(id) {
+    var target = state.expenses.filter(function (e) { return e.id === id; })[0];
+    if (!target) return;
+
+    editingId = id;
+    fDate.value = target.date;
+    fCategory.value = target.categoryId;
+    fTitle.value = target.title;
+    fAmount.value = comma(target.amount);
+    fMemo.value = target.memo || '';
+
+    document.getElementById('formTitle').textContent = '내역 수정';
+    document.getElementById('btnSubmit').textContent = '수정 완료';
+    document.getElementById('btnCancelEdit').hidden = false;
+
+    renderList();
+    form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    fTitle.focus({ preventScroll: true });
+  }
+
+  function resetForm() {
+    // 연속 입력이 편하도록 마지막에 고른 카테고리는 유지한다.
+    var keepCategory = fCategory.value;
+    editingId = null;
+    form.reset();
+    fDate.value = todayStr();
+    if (categoryById(keepCategory)) fCategory.value = keepCategory;
+    else if (state.categories.length) fCategory.value = state.categories[0].id;
+    document.getElementById('formTitle').textContent = '내역 추가';
+    document.getElementById('btnSubmit').textContent = '추가하기';
+    document.getElementById('btnCancelEdit').hidden = true;
+  }
+
+  document.getElementById('btnCancelEdit').addEventListener('click', function () {
+    resetForm();
+    renderList();
+  });
+
+  function askDeleteExpense(id) {
+    var target = state.expenses.filter(function (e) { return e.id === id; })[0];
+    if (!target) return;
+
+    openConfirm(
+      '내역을 삭제할까요?',
+      '‘' + target.title + '’ ' + won(target.amount) + ' 내역이 삭제돼요. 되돌릴 수 없어요.',
+      function () {
+        state.expenses = state.expenses.filter(function (e) { return e.id !== id; });
+        if (editingId === id) resetForm();
+        save();
+        render();
+        toast('삭제했어요');
+      }
+    );
+  }
+
+  /* =========================================================
+     카테고리 관리
+     ========================================================= */
+  var categoryModal = document.getElementById('categoryModal');
+
+  function openCategories() {
+    renderCategoryEditList();
+    categoryModal.hidden = false;
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeCategories() {
+    categoryModal.hidden = true;
+    document.body.style.overflow = '';
+  }
+
+  document.getElementById('btnCategories').addEventListener('click', openCategories);
+  document.getElementById('btnBudgetSetup').addEventListener('click', openCategories);
+  document.getElementById('btnCloseCategories').addEventListener('click', closeCategories);
+  categoryModal.addEventListener('click', function (event) {
+    if (event.target === categoryModal) closeCategories();
+  });
+
+  function renderCategoryEditList() {
+    var wrap = document.getElementById('categoryEditList');
+    var counts = {};
+    state.expenses.forEach(function (e) {
+      counts[e.categoryId] = (counts[e.categoryId] || 0) + 1;
+    });
+
+    if (!state.categories.length) {
+      wrap.innerHTML = '<div class="empty" style="padding:24px 0;"><div class="msg">카테고리가 없어요</div></div>';
+      return;
+    }
+
+    wrap.innerHTML = state.categories.map(function (c) {
+      return '<div class="cat-edit">' +
+          '<i class="dot" style="background:' + categoryColor(c.id) + '"></i>' +
+          '<span class="name">' + esc(c.name) +
+            (counts[c.id] ? ' <span style="color:var(--text-3);font-weight:500;">' + counts[c.id] + '건</span>' : '') +
+          '</span>' +
+          '<input type="text" class="budget-input tabular" inputmode="numeric" placeholder="예산" ' +
+            'value="' + (c.budget > 0 ? comma(c.budget) : '') + '" data-budget="' + c.id + '">' +
+          '<button type="button" class="btn-ghost danger" data-delcat="' + c.id + '" aria-label="삭제">삭제</button>' +
+        '</div>';
+    }).join('');
+
+    wrap.querySelectorAll('[data-budget]').forEach(function (input) {
+      input.addEventListener('input', function () {
+        var value = parseAmount(input.value);
+        input.value = value ? comma(value) : '';
+        var cat = categoryById(input.getAttribute('data-budget'));
+        if (cat) {
+          cat.budget = value;
+          save();
+          renderSummary();
+          renderCategorySummary();
+        }
+      });
+    });
+
+    wrap.querySelectorAll('[data-delcat]').forEach(function (btn) {
+      btn.addEventListener('click', function () { askDeleteCategory(btn.getAttribute('data-delcat')); });
+    });
+  }
+
+  document.getElementById('addCategoryForm').addEventListener('submit', function (event) {
+    event.preventDefault();
+    var input = document.getElementById('newCategoryName');
+    var name = input.value.trim();
+
+    if (!name) { toast('카테고리 이름을 입력해 주세요'); return; }
+
+    var dup = state.categories.some(function (c) { return c.name === name; });
+    if (dup) { toast('이미 있는 카테고리예요'); return; }
+
+    state.categories.push({ id: uid('cat'), name: name, budget: 0 });
+    input.value = '';
+    save();
+    renderCategoryEditList();
+    render();
+    toast('카테고리를 추가했어요');
+  });
+
+  function askDeleteCategory(id) {
+    var cat = categoryById(id);
+    if (!cat) return;
+
+    var related = state.expenses.filter(function (e) { return e.categoryId === id; });
+    var desc = related.length
+      ? '‘' + cat.name + '’ 카테고리와 해당 내역 ' + related.length + '건(' +
+        won(related.reduce(function (s, e) { return s + e.amount; }, 0)) + ')이 함께 삭제돼요.'
+      : '‘' + cat.name + '’ 카테고리를 삭제해요.';
+
+    openConfirm('카테고리를 삭제할까요?', desc, function () {
+      state.categories = state.categories.filter(function (c) { return c.id !== id; });
+      state.expenses = state.expenses.filter(function (e) { return e.categoryId !== id; });
+      if (activeFilter === id) activeFilter = 'all';
+      if (editingId && !state.expenses.some(function (e) { return e.id === editingId; })) resetForm();
+      save();
+      renderCategoryEditList();
+      render();
+      toast('삭제했어요');
+    });
+  }
+
+  document.getElementById('btnExport').addEventListener('click', function () {
+    var json = JSON.stringify(state, null, 2);
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(json).then(function () {
+        toast('JSON을 클립보드에 복사했어요');
+      }, function () {
+        console.log(json);
+        toast('복사 실패 · 콘솔에 출력했어요');
+      });
+    } else {
+      console.log(json);
+      toast('콘솔에 JSON을 출력했어요');
+    }
+  });
+
+  /* =========================================================
+     확인 다이얼로그
+     ========================================================= */
+  var confirmModal = document.getElementById('confirmModal');
+
+  function openConfirm(title, desc, onOk) {
+    document.getElementById('confirmTitle').textContent = title;
+    document.getElementById('confirmDesc').textContent = desc;
+    confirmHandler = onOk;
+    confirmModal.hidden = false;
+    document.getElementById('btnConfirmOk').focus();
+  }
+
+  function closeConfirm() {
+    confirmModal.hidden = true;
+    confirmHandler = null;
+  }
+
+  document.getElementById('btnConfirmOk').addEventListener('click', function () {
+    var handler = confirmHandler;
+    closeConfirm();
+    if (handler) handler();
+  });
+  document.getElementById('btnConfirmCancel').addEventListener('click', closeConfirm);
+  confirmModal.addEventListener('click', function (event) {
+    if (event.target === confirmModal) closeConfirm();
+  });
+
+  document.addEventListener('keydown', function (event) {
+    if (event.key !== 'Escape') return;
+    if (!confirmModal.hidden) closeConfirm();
+    else if (!categoryModal.hidden) closeCategories();
+  });
+
+  /* =========================================================
+     시작
+     ========================================================= */
+  state = load();
+  resetForm();
+  render();
+  save();
+})();
+</script>
+</body>
+</html>

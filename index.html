@@ -31,8 +31,9 @@
     --ease: cubic-bezier(.25, .46, .45, .94);
   }
 
+  /* 시스템 설정을 따르되, 뷰어가 라이트를 명시하면 그 선택이 이긴다. */
   @media (prefers-color-scheme: dark) {
-    :root {
+    :root:not([data-theme="light"]) {
       --blue: #4E93FF;
       --blue-hover: #6BA5FF;
       --blue-weak: #1B2A44;
@@ -50,6 +51,26 @@
       --shadow-md: 0 2px 8px rgba(0, 0, 0, .35);
       --shadow-lg: 0 8px 24px rgba(0, 0, 0, .5);
     }
+  }
+
+  /* 뷰어가 다크를 명시한 경우 (시스템 설정과 무관하게 적용) */
+  :root[data-theme="dark"] {
+    --blue: #4E93FF;
+    --blue-hover: #6BA5FF;
+    --blue-weak: #1B2A44;
+    --bg: #17171C;
+    --surface: #202027;
+    --surface-sub: #2A2A32;
+    --text: #F2F4F6;
+    --text-2: #C9CDD2;
+    --text-3: #8B95A1;
+    --border: #33333D;
+    --border-strong: #454550;
+    --red: #FF6B76;
+    --red-weak: #3A2226;
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, .3);
+    --shadow-md: 0 2px 8px rgba(0, 0, 0, .35);
+    --shadow-lg: 0 8px 24px rgba(0, 0, 0, .5);
   }
 
   * { box-sizing: border-box; }

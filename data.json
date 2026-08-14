@@ -1,0 +1,70 @@
+{
+  "categories": [
+    { "id": "cat1", "name": "임차보증금/권리금", "budget": 60000000 },
+    { "id": "cat2", "name": "인테리어비", "budget": 35000000 },
+    { "id": "cat3", "name": "주방기기·설비비", "budget": 15000000 },
+    { "id": "cat4", "name": "가구·집기비", "budget": 5000000 },
+    { "id": "cat5", "name": "초도 식자재비", "budget": 3000000 },
+    { "id": "cat6", "name": "인허가·등록비", "budget": 1000000 },
+    { "id": "cat7", "name": "오픈 마케팅비", "budget": 2000000 },
+    { "id": "cat8", "name": "예비비", "budget": 5000000 }
+  ],
+  "expenses": [
+    {
+      "id": "exp1",
+      "categoryId": "cat1",
+      "date": "2026-08-15",
+      "title": "보증금 계약금",
+      "amount": 50000000,
+      "memo": "보증금 5천 / 권리금 별도 협의"
+    },
+    {
+      "id": "exp2",
+      "categoryId": "cat2",
+      "date": "2026-08-20",
+      "title": "홀·주방 인테리어 1차",
+      "amount": 30000000,
+      "memo": "총 3회 분납 중 1차"
+    },
+    {
+      "id": "exp3",
+      "categoryId": "cat3",
+      "date": "2026-08-22",
+      "title": "냉장고·화구·후드",
+      "amount": 12500000,
+      "memo": ""
+    },
+    {
+      "id": "exp4",
+      "categoryId": "cat4",
+      "date": "2026-08-25",
+      "title": "테이블 12세트·의자",
+      "amount": 4800000,
+      "memo": ""
+    },
+    {
+      "id": "exp5",
+      "categoryId": "cat6",
+      "date": "2026-08-26",
+      "title": "영업신고·위생교육",
+      "amount": 350000,
+      "memo": "위생교육 수료증 포함"
+    },
+    {
+      "id": "exp6",
+      "categoryId": "cat5",
+      "date": "2026-08-30",
+      "title": "초도 식자재 입고",
+      "amount": 2400000,
+      "memo": ""
+    },
+    {
+      "id": "exp7",
+      "categoryId": "cat7",
+      "date": "2026-09-01",
+      "title": "오픈 전단·SNS 광고",
+      "amount": 1800000,
+      "memo": "인스타 리뷰단 포함"
+    }
+  ]
+}
